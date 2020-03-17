@@ -1,0 +1,30 @@
+/* 
+
+Daily Coding Problem 203
+
+Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand. 
+
+Find the minimum element in O(log N) time. You may assume the array does not contain duplicates.
+
+For example, given [5, 7, 10, 3, 4], return 3.
+
+*/
+
+DCP203 = (array) => {
+    if (array[0] > array[array.length-1]) {
+        const midPoint = Math.floor(array.length/2);
+        const midValue = array[midPoint];
+
+        if (array[0] > midValue) {
+            return DCP203(array.slice(midPoint));
+        } else {
+            return DCP203(array.slice(-midPoint));
+        }
+    } else {
+        return array[0];
+    }
+}
+
+const test = [5, 7, 10, 3, 4];
+
+console.log(DCP203(test));
