@@ -1,0 +1,29 @@
+/*
+
+Daily Coding Problem 206
+
+A permutation can be specified by an array P, where P[i] represents the location of the element at i in the permutation. 
+
+For example, [2, 1, 0] represents the permutation where elements at the index 0 and 2 are swapped.
+
+Given an array and a permutation, apply the permutation to the array. 
+
+For example, given the array ["a", "b", "c"] and the permutation [2, 1, 0], return ["c", "b", "a"].
+
+*/
+
+DCP206 = (array, permutation) => {
+    const output = [];
+
+    for (let x = 0; x < permutation.length; x++) {
+        const index = permutation[x];
+        output.push(array[index]);
+    }
+
+    return output;
+}
+
+const testArray = ['a', 'b', 'c'];
+const testPermutation = [2, 1, 0];
+
+console.log(DCP206(testArray, testPermutation));
