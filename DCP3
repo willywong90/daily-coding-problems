@@ -1,0 +1,74 @@
+/*
+
+Daily Coding Problem 3
+
+Given the root to a binary tree, implement serialize(root), which serializes the tree into a string, and deserialize(s), which deserializes the string back into the tree.
+
+For example, given the following Node class
+
+class Node:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+The following test should pass:
+
+node = Node('root', Node('left', Node('left.left')), Node('right'))
+assert deserialize(serialize(node)).left.left.val == 'left.left'
+
+*/
+
+class Node {
+    constructor(data, left = null, right = null) {
+        this.data = data;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+serialize = (node) => {
+    if (node) {
+        return '(' + serialize(node.left) + ',' + serialize(node.right) + ',' + node.data + ')';
+    } else {
+        return '';
+    }
+}
+
+deserialize = (nodeString) => {
+    var stringLength = nodeString.length;
+    var stack = [];
+    var data = '';
+
+    for (var i = 0; i < stringLength; i++) {
+        var char = nodeString[i];
+        if (char === ',' || char === ')') {
+            var node = new Node(data);
+
+            if (char === ',') {
+                if (nodeString[i-1] !== ')') {
+                    if (data === '') {
+                        node = null;
+                    }
+                    stack.push(node);
+                    data = '';
+                }
+            } else {
+                node.right = stack.pop();
+                node.left = stack.pop();
+                stack.push(node);
+                data = '';
+            }
+        } else if (char === '(') {
+        } else {
+            data = data + char;
+        }
+    }
+
+    return stack.pop();
+}
+
+var test1 = new Node('root', new Node('left', new Node('left.left')), new Node('right'));
+var test2 = new Node('root', new Node('left'), new Node('right'));
+
+console.log(serialize(test1));
+console.log(deserialize(serialize(test1)));
