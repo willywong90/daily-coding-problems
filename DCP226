@@ -1,0 +1,88 @@
+/*
+
+Daily Coding Problem 226
+
+You come across a dictionary of sorted words in a language you've never seen before.
+
+Write a program that returns the correct order of letters in this language.
+
+For example, given ['xww', 'wxyz', 'wxyw', 'ywx', 'ywz'], you should return ['x', 'z', 'w', 'y'].
+
+*/
+
+function dcp226(dictionary) {
+    var sortedLetters = [];
+    var letterDictionary = {};
+
+    // check first letter of words
+    // push to array if there are multiple words with same first letter
+    var previousFirstLetter = '';
+    for (var x = 0; x < dictionary.length; x++) {
+        var word = dictionary[x];
+        var firstLetter = word[0];
+
+        if (!letterDictionary[firstLetter]) {
+            letterDictionary[firstLetter] = [];
+        }
+
+        var subString = word.substr(1);
+
+        if (subString) {
+            letterDictionary[firstLetter].push(subString);
+        }
+
+        if (firstLetter !== previousFirstLetter) {
+            sortedLetters.push(firstLetter);
+            previousFirstLetter = firstLetter;
+        }
+    }
+
+    var sortedSubLetters = [];
+    for (var x = 0; x < sortedLetters.length; x++) {
+        var letter = sortedLetters[x];
+        if (letterDictionary[letter].length > 1) {
+            var sorted = dcp226(letterDictionary[letter]);
+
+            if (sorted.length > 1) {
+                sortedSubLetters = mergeArrays(sortedSubLetters, sorted);
+                console.log(sortedSubLetters);
+            }
+        }
+    }
+
+    if (sortedLetters.length === 1) {
+        return sortedSubLetters;
+    } else {
+        return mergeArrays(sortedLetters, sortedSubLetters);
+    }
+
+    return sortedLetters;
+}
+
+function mergeArrays(array1, array2) {
+    var merged = [];
+    var lastAddedIndex = 0;
+
+    for (var x = 0; x < array1.length; x++) {
+        var letter = array1[x];
+        var foundIndex = array2.indexOf(letter);
+
+        if (foundIndex === -1) {
+            merged.push(letter);
+        } else {
+            for (var y = lastAddedIndex; y <= foundIndex; y++) {
+                merged.push(array2[y]);
+                lastAddedIndex = foundIndex + 1;
+            }
+        }
+    }
+
+    if (lastAddedIndex === 0) {
+        merged = merged.concat(array2);
+    }
+
+    return merged;
+}
+
+var test = ['xww', 'wxyz', 'wxyw', 'ywx', 'ywz'];
+console.log(dcp226(test));
