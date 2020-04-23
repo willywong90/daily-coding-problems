@@ -1,0 +1,93 @@
+/*
+
+This problem was asked by Dropbox.
+
+Given a list of words, determine whether the words can be chained to form a circle. 
+
+A word X can be placed in front of another word Y in a circle if the last character of X is same as the first character of Y.
+
+For example, the words 
+
+['chair', 'height', 'racket', touch', 'tunic'] 
+
+can form the following circle: 
+
+chair --> racket --> touch --> height --> tunic --> chair
+
+*/
+
+function dcp246(words) {
+    var letterIndex = {};
+
+    for (var x = 0; x < words.length; x++) {
+        var letter = words[x].substr(0,1);
+
+        if (letterIndex.hasOwnProperty(letter)) {
+            letterIndex[letter].push(words[x]);
+        } else {
+            letterIndex[letter] = [words[x]];
+        }
+    }
+
+    var visited = [];
+
+    for (var x = 0; x < words.length; x++) {
+        visited[words[x]] = false;
+    }
+
+    for (var x = 0; x < words.length; x++) {
+        var cycle = [];
+        var startingWord = words[x];
+        
+        if (visitNext(startingWord, visited, letterIndex, cycle)) {
+            cycle.push(words[x]);
+            return cycle;
+        }
+    }
+}
+
+function visitNext(word, visited, words, cycle) {
+    if (visited[word]) {
+        var visitedKeys = Object.keys(visited);
+
+        for (var x = 0; x < visitedKeys.length; x++) {
+            if (!visited[visitedKeys[x]]) {
+                return false;
+            }
+        }
+
+        var firstLetterFirstWord = cycle[0].substr(0, 1);
+        var lastLetterLastWord = cycle.slice(-1)[0].slice(-1);
+
+        if (firstLetterFirstWord === lastLetterLastWord) {
+            return true;   
+        } else {
+            return false;
+        }
+    } else {
+        visited[word] = true;
+        cycle.push(word);
+
+        endingLetter = word.slice(-1);
+
+        var adjacentWords = words[endingLetter];
+
+        if (adjacentWords) {
+            for (var y = 0; y < adjacentWords.length; y++) {
+                if(visitNext(adjacentWords[y], visited, words, cycle)) {
+                    return true;
+                }
+            }
+
+            cycle.pop(word);
+            visited[word] = false;
+            
+            return false;
+        } else {
+            return false;
+        }
+    }
+}
+
+var test = ['chair', 'height', 'racket', 'touch', 'tunic'];
+console.log(dcp246(test));
