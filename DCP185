@@ -1,0 +1,78 @@
+/*
+
+Daily Coding Problem 185
+
+Given two rectangles on a 2D graph, return the area of their intersection. 
+
+If the rectangles don't intersect, return 0.
+
+For example, given the following rectangles:
+
+{
+    "top_left": (1, 4),
+    "dimensions": (3, 3) # width, height
+}
+
+and
+
+{
+    "top_left": (0, 5),
+    "dimensions": (4, 3) # width, height
+}
+
+return 6.
+
+*/
+
+function dcp185(rect1, rect2) {
+    var intersecting = [];
+
+    var rect1Horizontal = getHorizontalLine(rect1);
+    var rect1Vertical = getVerticalLine(rect1);
+
+    var rect2Horizontal = getHorizontalLine(rect2);
+    var rect2Vertical = getVerticalLine(rect2);
+
+    intersecting[0] = getIntersectingLine(rect1Horizontal, rect2Horizontal);
+    intersecting[1] = getIntersectingLine(rect1Vertical, rect2Vertical);
+
+    return (intersecting[0][1] - intersecting[0][0]) * (intersecting[1][1] - intersecting[1][0]);
+}
+
+function getHorizontalLine(rect) {
+    return [rect.top_left[0], rect.top_left[0] + rect.dimensions[0]];
+}
+
+function getVerticalLine(rect) {
+    return [rect.top_left[1] - rect.dimensions[1], rect.top_left[1]];
+}
+
+function getIntersectingLine(line1, line2) {
+    var intersect = [];
+
+    if (line1[0] > line2[0] && line1[0] < line2[1]) {
+        intersect[0] = line1[0];
+    } else {
+        intersect[0] = line2[0];
+    }
+
+    if (line1[1] > line2[0] && line1[1] < line2[1]) {
+        intersect[1] = line1[1];
+    } else {
+        intersect[1] = line2[1];
+    }
+
+    return intersect;
+}
+
+var rectangle1 = {
+    top_left: [1, 4],
+    dimensions: [3, 3]
+}
+
+var rectangle2 = {
+    top_left: [0, 5],
+    dimensions: [4, 3]
+}
+
+console.log(dcp185(rectangle1, rectangle2));
