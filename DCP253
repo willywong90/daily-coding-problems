@@ -1,0 +1,65 @@
+/*
+
+Daily Coding Problem 253
+
+Given a string and a number of lines k, print the string in zigzag form. 
+
+In zigzag, characters are printed out diagonally from top left to bottom right until reaching the kth line, then back up to top right, and so on.
+
+*/
+
+function dcp253(text, k) {
+    var rows = [];
+    var direction = 1;
+    var row = 0;
+
+    for (var x = 0; x < text.length; x++) {
+        if (!rows[row]) {
+            rows[row] = [];
+        }
+
+        rows[row].push(text.charAt(x));
+
+        if (row === (k - 1)) {
+            direction = -1;
+        } else if (row === 0) {
+            direction = 1;
+        }
+
+        row = row + direction;
+    }
+
+    // print with spacing
+    var maxSpace = (k - 2) * 2 + 1;
+
+    for (var x = 0; x < rows.length; x++) {
+        var line = '';
+        var spaceCharacter = ' ';
+
+        var oddSpaceCalc = (x * 2) - 1;
+        var oddSpace = spaceCharacter.repeat(oddSpaceCalc >= 0 ? oddSpaceCalc : maxSpace);
+
+        var evenSpaceCalc = maxSpace - (2 * x);
+        var evenSpace = spaceCharacter.repeat(evenSpaceCalc >= 0 ? evenSpaceCalc : maxSpace);
+
+        for (var y = 0; y < rows[x].length; y++) {
+            if (y === 0) {
+                line = line + spaceCharacter.repeat(Math.ceil(oddSpaceCalc/2));
+            } else {
+                if (y % 2 === 0) {
+                    line = line + oddSpace;
+                } else {
+                    line = line + evenSpace;
+                }
+            }
+
+            line = line + rows[x][y];
+        }
+
+        console.log(line);
+    }
+}
+
+var k = 4;
+var test = 'thisisazigzag';
+dcp253(test, k);
