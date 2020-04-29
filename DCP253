@@ -1,0 +1,45 @@
+/*
+
+Daily Coding Problem 253
+
+Recall that a full binary tree is one in which each node is either a leaf node, or has two children.
+
+Given a binary tree, convert it to a full one by removing nodes with only one child.
+
+*/
+
+class Node {
+    constructor(value, left = null, right = null) {
+        this.value = value;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+function dcp254(root) {
+    return traverseTree(root);
+}
+
+function isFullTree(node) {
+    return (node.left && node.right);
+}
+
+function traverseTree(root) {
+    if (isFullTree(root)) {
+        root.left = traverseTree(root.left);
+        root.right = traverseTree(root.right);
+
+        return root;
+    } else {
+        if (root.left) {
+            return traverseTree(root.left);
+        } else if (root.right) {
+            return traverseTree(root.right);
+        } else {
+            return root;
+        }
+    }
+}
+
+var test = new Node(0, new Node(1, new Node(3, null, new Node(5))), new Node(2, null, new Node(4, new Node(6), new Node(7))));
+dcp254(test);
