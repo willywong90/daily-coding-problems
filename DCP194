@@ -1,0 +1,66 @@
+/*
+
+Daily Coding Problem 194
+
+Suppose you are given two lists of n points, one list p1, p2, ..., pn on the line y = 0 and the other list q1, q2, ..., qn on the line y = 1. 
+
+Imagine a set of n line segments connecting each point pi to qi. 
+
+Write an algorithm to determine how many pairs of the line segments intersect.
+ 
+*/
+
+dcp194 = (list1, list2) => {
+    let intersects = 0;
+
+    for (let x = 0; x < list1.length; x++) {
+        for (let y = 0; y < list1.length; y++) {
+            if (x !== y) {
+                const line1 = [list1[x], list2[x]];
+                const line2 = [list1[y], list2[y]];
+
+                if (hasIntersect(line1, line2)) {
+                    intersects++;
+                }
+            }
+        }
+    }
+
+    return intersects/2;
+}
+
+hasIntersect = (line1, line2) => {
+    if ((line1[0] < line2[0] && line1[1] < line2[1]) || (line1[0] > line2[0] && line1[1] > line2[1])) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+test1 = () => {
+    const list1 = [1, 2, 3, 4];
+    const list2 = [4, 3, 2, 1];
+
+    console.log('Test 1: ');
+    console.log(dcp194(list1, list2));
+}
+
+test2 = () => {
+    const list1 = [1, 2, 3, 4];
+    const list2 = [2, 1, 4, 3];
+
+    console.log('Test 2: ');
+    console.log(dcp194(list1, list2));
+}
+
+test3 = () => {
+    const list1 = [1, 2, 3, 4];
+    const list2 = [1, 2, 3, 4];
+
+    console.log('Test 3: ');
+    console.log(dcp194(list1, list2));
+}
+
+test1();
+test2();
+test3();
